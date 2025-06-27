@@ -6,10 +6,12 @@ module.exports = {
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
-    'prettier'
+    'prettier',
   ],
   rules: {
     'react/react-in-jsx-scope': 'off',
+    'no-unused-vars': 'warn',
+    'no-undef': 'off',
   },
   settings: {
     react: {
