@@ -10,12 +10,16 @@ import {
 import { useState } from 'react';
 import { loginUser } from '@educational-loan-portal/services';
 import { TextInput } from 'components/TextInput';
+import { useDispatch } from 'react-redux';
+import { login } from '@educational-loan-portal/store';
+import { AppDispatch } from '@educational-loan-portal/store';
 
 export const LoginPage = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [errorField, setErrorField] = useState<'email' | 'password' | ''>('');
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -57,6 +61,7 @@ export const LoginPage = () => {
       const res = await loginUser(formData);
       localStorage.setItem('token', res.token);
       localStorage.setItem('role', res.role);
+      dispatch(login({ token: res.token, role: res.role }));
       window.location.href = res.role === 'admin' ? '/admin/dashboard' : '/client/dashboard';
     } catch (error: any) {
       setErrorMsg(error?.response?.data?.message || 'Invalid credentials');

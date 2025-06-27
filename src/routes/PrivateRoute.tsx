@@ -1,11 +1,18 @@
-import { JSX } from 'react';
 import { Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '@educational-loan-portal/store';
+import { JSX } from 'react';
 
-export const PrivateRoute = ({ children, role }: { children: JSX.Element; role: string }) => {
-  const token = localStorage.getItem('token');
-  const userRole = localStorage.getItem('role');
+export const PrivateRoute = ({
+  children,
+  role: allowedRole,
+}: {
+  children: JSX.Element;
+  role: 'admin' | 'client';
+}) => {
+  const { token, role } = useSelector((state: RootState) => state.auth);
 
-  if (!token || userRole !== role) {
+  if (!token || role !== allowedRole) {
     return <Navigate to="/login" />;
   }
 
