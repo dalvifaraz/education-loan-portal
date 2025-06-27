@@ -1,25 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { LoginPage } from './features';
+import { PrivateRoute } from './routes';
+
+
+const AdminDashboard = () => <h2>Welcome Admin!</h2>;
+const ClientDashboard = () => <h2>Welcome Client!</h2>;
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React App
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route
+          path="/admin/dashboard"
+          element={
+            <PrivateRoute role="admin">
+              <AdminDashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/client/dashboard"
+          element={
+            <PrivateRoute role="client">
+              <ClientDashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route path="*" element={<LoginPage />} />
+      </Routes>
+    </Router>
   );
 }
 

@@ -21,14 +21,14 @@
     "jsx": "react-jsx",
     "baseUrl": "src",
     "paths": {
-      "@components/*": ["components/*"],
-      "@features/*": ["features/*"],
-      "@hooks/*": ["hooks/*"],
-      "@pages/*": ["pages/*"],
-      "@routes/*": ["routes/*"],
-      "@services/*": ["services/*"],
-      "@store/*": ["store/*"],
-      "@utils/*": ["utils/*"]
+      "@educational-loan-portal/components": ["components/index.ts"],
+      "@educational-loan-portal/features": ["features/index.ts"],
+      "@hooks": ["hooks/index.ts"],
+      "@pages": ["pages/index.ts"],
+      "@routes": ["routes/index.ts"],
+      "@services": ["services/index.ts"],
+      "@store": ["store/index.ts"],
+      "@utils": ["utils/index.ts"]
     }
   },
   "include": [
