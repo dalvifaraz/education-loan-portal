@@ -1,4 +1,4 @@
-import API from "./api";
+import API from './api';
 
 // Fetch all loans for logged-in client
 export const getClientLoans = async () => {

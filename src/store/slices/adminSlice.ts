@@ -18,10 +18,13 @@ export const fetchAllLoans = createAsyncThunk('admin/fetchAllLoans', async () =>
   return res.data;
 });
 
-export const changeLoanStatus = createAsyncThunk('admin/changeLoanStatus', async ({ id, status }: { id: string; status: 'approved' | 'rejected' }) => {
-  const res = await updateLoanStatus(id, status);
-  return res.data;
-});
+export const changeLoanStatus = createAsyncThunk(
+  'admin/changeLoanStatus',
+  async ({ id, status }: { id: string; status: 'approved' | 'rejected' }) => {
+    const res = await updateLoanStatus(id, status);
+    return res.data;
+  }
+);
 
 const adminSlice = createSlice({
   name: 'admin',

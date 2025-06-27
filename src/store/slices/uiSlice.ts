@@ -20,10 +20,18 @@ const uiSlice = createSlice({
   name: 'ui',
   initialState,
   reducers: {
-    showLoader: (state) => { state.loading = true; },
-    hideLoader: (state) => { state.loading = false; },
-    showSnackbar: (state, action: PayloadAction<SnackbarState>) => {
-      state.snackbar = { ...action.payload, open: true };
+    showLoader: (state) => {
+      state.loading = true;
+    },
+    hideLoader: (state) => {
+      state.loading = false;
+    },
+    showSnackbar: (state, action: PayloadAction<Partial<SnackbarState>>) => {
+      state.snackbar = {
+        ...state.snackbar,
+        ...action.payload,
+        open: true, // always open when dispatching
+      };
     },
     hideSnackbar: (state) => {
       state.snackbar.open = false;
