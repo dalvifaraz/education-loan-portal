@@ -1,29 +1,35 @@
 import { TextField } from '@mui/material';
-import { Controller } from 'react-hook-form';
 
 interface Props {
-  name: string;
   label: string;
-  control: any;
+  name: string;
+  value: string;
   type?: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  error?: string;
+  autoComplete?: string;
 }
 
-export const TextInput = ({ name, label, control, type = 'text' }: Props) => (
-  <Controller
+export const TextInput = ({
+  label,
+  name,
+  value,
+  type = 'text',
+  onChange,
+  error,
+  autoComplete = 'off',
+}: Props) => (
+  <TextField
+    fullWidth
+    label={label}
     name={name}
-    control={control}
-    render={({ field, fieldState: { error } }) => (
-      <TextField
-        {...field}
-        label={label}
-        fullWidth
-        type={type}
-        margin="normal"
-        variant="outlined"
-        error={!!error}
-        helperText={error ? error.message : ''}
-        autoComplete="new-password"
-      />
-    )}
+    type={type}
+    value={value}
+    onChange={onChange}
+    margin="normal"
+    variant="outlined"
+    error={!!error}
+    helperText={error}
+    autoComplete={autoComplete}
   />
 );

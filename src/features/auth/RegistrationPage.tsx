@@ -1,28 +1,65 @@
-// @features/auth/RegisterPage.tsx
-import { useForm } from 'react-hook-form';
+import { useState } from 'react';
 import { Button, Container, Typography, Box } from '@mui/material';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 import { TextInput } from '@educational-loan-portal/components';
 import { registerUser } from '@educational-loan-portal/services';
 
-const schema = yup.object().shape({
-  name: yup.string().required(),
-  email: yup.string().email().required(),
-  password: yup.string().min(6).required(),
-  role: yup.string().oneOf(['client']).required(), // We restrict only 'client' can register directly
-});
-
 export const RegisterPage = () => {
-  const { control, handleSubmit } = useForm({ resolver: yupResolver(schema) });
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+  });
 
-  const onSubmit = async (data: any) => {
+  const [errorMsg, setErrorMsg] = useState('');
+  const [errorField, setErrorField] = useState<'name' | 'email' | 'password' | ''>('');
+  const [success, setSuccess] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setErrorField('');
+    setErrorMsg('');
+  };
+
+  const validateForm = () => {
+    if (!formData.name.trim()) {
+      setErrorField('name');
+      return 'Name is required';
+    }
+    if (!formData.email.trim()) {
+      setErrorField('email');
+      return 'Email is required';
+    }
+    if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      setErrorField('email');
+      return 'Invalid email';
+    }
+    if (!formData.password.trim()) {
+      setErrorField('password');
+      return 'Password is required';
+    }
+    if (formData.password.length < 6) {
+      setErrorField('password');
+      return 'Password must be at least 6 characters';
+    }
+    return '';
+  };
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSuccess(false);
+    const validationError = validateForm();
+    if (validationError) {
+      setErrorMsg(validationError);
+      return;
+    }
+
     try {
-      await registerUser(data);
+      await registerUser({ ...formData, role: 'client' });
+      setSuccess(true);
       alert('Registration successful! Please login.');
       window.location.href = '/login';
     } catch (error: any) {
-      alert(error?.response?.data?.message || 'Registration failed');
+      setErrorMsg(error?.response?.data?.message || 'Registration failed');
     }
   };
 
@@ -32,10 +69,32 @@ export const RegisterPage = () => {
         <Typography variant="h5" align="center" gutterBottom>
           Register
         </Typography>
-        <form onSubmit={handleSubmit(onSubmit)} noValidate autoComplete="off">
-          <TextInput name="name" label="Full Name" control={control} />
-          <TextInput name="email" label="Email" control={control} />
-          <TextInput name="password" label="Password" control={control} type="password" />
+        <form onSubmit={onSubmit} noValidate autoComplete="off">
+          <TextInput
+            name="name"
+            label="Full Name"
+            value={formData.name}
+            onChange={handleChange}
+            error={errorField === 'name' ? errorMsg : ''}
+            autoComplete="new-name"
+          />
+          <TextInput
+            name="email"
+            label="Email"
+            value={formData.email}
+            onChange={handleChange}
+            error={errorField === 'email' ? errorMsg : ''}
+            autoComplete="new-email"
+          />
+          <TextInput
+            name="password"
+            label="Password"
+            type="password"
+            value={formData.password}
+            onChange={handleChange}
+            error={errorField === 'password' ? errorMsg : ''}
+            autoComplete="new-password"
+          />
           <Button fullWidth variant="contained" type="submit" sx={{ mt: 2 }}>
             Register
           </Button>
