@@ -1,9 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 const DummyUtil = () => {
-  return (
-    <div>DummyUtil</div>
-  )
-}
+  return <div>DummyUtil</div>;
+};
 
-export default DummyUtil
+export default DummyUtil;

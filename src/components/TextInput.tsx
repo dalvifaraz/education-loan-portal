@@ -22,6 +22,7 @@ export const TextInput = ({ name, label, control, type = 'text' }: Props) => (
         variant="outlined"
         error={!!error}
         helperText={error ? error.message : ''}
+        autoComplete="new-password"
       />
     )}
   />

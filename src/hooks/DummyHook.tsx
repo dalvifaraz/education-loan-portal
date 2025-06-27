@@ -1,9 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 const DummyHook = () => {
-  return (
-    <div>DummyHook</div>
-  )
-}
+  return <div>DummyHook</div>;
+};
 
-export default DummyHook
+export default DummyHook;

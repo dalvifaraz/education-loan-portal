@@ -1,16 +1,9 @@
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import {
-  Button,
-  Typography,
-  Container,
-  Box,
-  CircularProgress,
-  Alert,
-} from '@mui/material';
+import { Button, Typography, Container, Box, CircularProgress, Alert } from '@mui/material';
 import { useState } from 'react';
-import { loginUser } from '../../services';
+import { loginUser } from '@educational-loan-portal/services';
 import { TextInput } from '@educational-loan-portal/components';
 
 const schema = yup.object().shape({
@@ -45,16 +38,10 @@ export const LoginPage = () => {
           Education Loan Portal Login
         </Typography>
         {errorMsg && <Alert severity="error">{errorMsg}</Alert>}
-        <form onSubmit={handleSubmit(onSubmit)} noValidate>
+        <form onSubmit={handleSubmit(onSubmit)} noValidate autoComplete="off">
           <TextInput name="email" label="Email" control={control} />
           <TextInput name="password" label="Password" control={control} type="password" />
-          <Button
-            fullWidth
-            variant="contained"
-            type="submit"
-            sx={{ mt: 2 }}
-            disabled={loading}
-          >
+          <Button fullWidth variant="contained" type="submit" sx={{ mt: 2 }} disabled={loading}>
             {loading ? <CircularProgress size={24} color="inherit" /> : 'Login'}
           </Button>
         </form>

@@ -1,16 +1,18 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { LoginPage } from './features';
-import { PrivateRoute } from './routes';
+import { HomePage, LoginPage, RegisterPage } from '@educational-loan-portal/features';
+import { PrivateRoute } from '@educational-loan-portal/routes';
 
-
-const AdminDashboard = () => <h2>Welcome Admin!</h2>;
-const ClientDashboard = () => <h2>Welcome Client!</h2>;
+const AdminDashboard = () => <h2>Admin Dashboard</h2>;
+const ClientDashboard = () => <h2>Client Dashboard</h2>;
+const ErrorPage = () => <h2>404 - App Page Not Found</h2>;
 
 function App() {
   return (
     <Router>
       <Routes>
+        <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
         <Route
           path="/admin/dashboard"
           element={
@@ -27,7 +29,7 @@ function App() {
             </PrivateRoute>
           }
         />
-        <Route path="*" element={<LoginPage />} />
+        <Route path="*" element={<ErrorPage />} />
       </Routes>
     </Router>
   );
