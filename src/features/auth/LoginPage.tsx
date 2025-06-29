@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button, Typography, Container, Box, CircularProgress } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { TextInput } from '@educational-loan-portal/components';
-import { loginUser } from '@educational-loan-portal/services';
+import { loginUser, loginUserV2 } from '@educational-loan-portal/services';
 import { login, showSnackbar } from '@educational-loan-portal/store';
 
 export const LoginPage = () => {
@@ -20,7 +20,7 @@ export const LoginPage = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await loginUser(formData);
+      const res = await loginUserV2(formData);
       dispatch(login({ token: res.token, role: res.role }));
       dispatch(showSnackbar({ message: 'Login successful!', severity: 'success' }));
       navigate(res.role === 'admin' ? '/admin/dashboard' : '/client/dashboard');
@@ -54,6 +54,9 @@ export const LoginPage = () => {
           <Button fullWidth variant="contained" type="submit" sx={{ mt: 2 }} disabled={loading}>
             {loading ? <CircularProgress size={24} color="inherit" /> : 'Login'}
           </Button>
+          <Typography variant="body2" align="center" mt={2}>
+            Don’t have an account? <Link to="/register">Register here</Link>
+          </Typography>
         </form>
       </Box>
     </Container>

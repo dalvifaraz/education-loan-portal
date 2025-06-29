@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Button, Container, Typography, Box } from '@mui/material';
 import { TextInput } from '@educational-loan-portal/components';
-import { registerUser } from '@educational-loan-portal/services';
+import { registerUser, registerUserV2 } from '@educational-loan-portal/services';
+import { Link } from 'react-router-dom';
 
 export const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -54,7 +55,7 @@ export const RegisterPage = () => {
     }
 
     try {
-      await registerUser({ ...formData, role: 'client' });
+      await registerUserV2({ ...formData, role: 'client' });
       setSuccess(true);
       alert('Registration successful! Please login.');
       window.location.href = '/login';
@@ -98,6 +99,9 @@ export const RegisterPage = () => {
           <Button fullWidth variant="contained" type="submit" sx={{ mt: 2 }}>
             Register
           </Button>
+          <Typography variant="body2" align="center" mt={2}>
+            Already registered? <Link to="/login">Login here</Link>
+          </Typography>
         </form>
       </Box>
     </Container>
