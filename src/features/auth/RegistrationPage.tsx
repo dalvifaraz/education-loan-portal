@@ -1,107 +1,85 @@
 import { useState } from 'react';
 import { Button, Container, Typography, Box } from '@mui/material';
 import { TextInput } from '@educational-loan-portal/components';
-import { registerUser, registerUserV2 } from '@educational-loan-portal/services';
-import { Link } from 'react-router-dom';
+import { registerUserV2 } from '@educational-loan-portal/services';
+import { setUser, showSnackbar, UserState } from '@educational-loan-portal/store';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 export const RegisterPage = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
+    confirmPassword: '',
   });
 
-  const [errorMsg, setErrorMsg] = useState('');
-  const [errorField, setErrorField] = useState<'name' | 'email' | 'password' | ''>('');
-  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-    setErrorField('');
-    setErrorMsg('');
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
 
-  const validateForm = () => {
-    if (!formData.name.trim()) {
-      setErrorField('name');
-      return 'Name is required';
-    }
-    if (!formData.email.trim()) {
-      setErrorField('email');
-      return 'Email is required';
-    }
-    if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      setErrorField('email');
-      return 'Invalid email';
-    }
-    if (!formData.password.trim()) {
-      setErrorField('password');
-      return 'Password is required';
-    }
-    if (formData.password.length < 6) {
-      setErrorField('password');
-      return 'Password must be at least 6 characters';
-    }
-    return '';
-  };
-
-  const onSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSuccess(false);
-    const validationError = validateForm();
-    if (validationError) {
-      setErrorMsg(validationError);
+    setError('');
+
+    const { name, email, password, confirmPassword } = formData;
+
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
       return;
     }
 
     try {
-      await registerUserV2({ ...formData, role: 'client' });
-      setSuccess(true);
-      alert('Registration successful! Please login.');
-      window.location.href = '/login';
-    } catch (error: any) {
-      setErrorMsg(error?.response?.data?.message || 'Registration failed');
+      const res: UserState = await registerUserV2({ name, email, password, confirmPassword });
+      dispatch(setUser(res));
+      navigate('/landing');
+    } catch (err: any) {
+      const message = err?.response?.data?.message || 'Registration failed';
+      dispatch(showSnackbar({ message, severity: 'error' }));
     }
   };
+
+  const isDisabled =
+    !formData.name ||
+    !formData.email ||
+    !formData.password ||
+    formData.password !== formData.confirmPassword;
 
   return (
     <Container maxWidth="xs">
       <Box mt={8} p={4} boxShadow={3} borderRadius={2} bgcolor="white">
-        <Typography variant="h5" align="center" gutterBottom>
+        <Typography variant="h5" align="center">
           Register
         </Typography>
-        <form onSubmit={onSubmit} noValidate autoComplete="off">
-          <TextInput
-            name="name"
-            label="Full Name"
-            value={formData.name}
-            onChange={handleChange}
-            error={errorField === 'name' ? errorMsg : ''}
-            autoComplete="new-name"
-          />
-          <TextInput
-            name="email"
-            label="Email"
-            value={formData.email}
-            onChange={handleChange}
-            error={errorField === 'email' ? errorMsg : ''}
-            autoComplete="new-email"
-          />
+        {error && <Typography color="error">{error}</Typography>}
+        <form onSubmit={handleSubmit}>
+          <TextInput name="name" label="Full Name" value={formData.name} onChange={handleChange} />
+          <TextInput name="email" label="Email" value={formData.email} onChange={handleChange} />
           <TextInput
             name="password"
             label="Password"
             type="password"
             value={formData.password}
             onChange={handleChange}
-            error={errorField === 'password' ? errorMsg : ''}
-            autoComplete="new-password"
           />
-          <Button fullWidth variant="contained" type="submit" sx={{ mt: 2 }}>
+          <TextInput
+            name="confirmPassword"
+            label="Confirm Password"
+            type="password"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+          />
+          <Button fullWidth variant="contained" sx={{ mt: 2 }} type="submit" disabled={isDisabled}>
             Register
           </Button>
-          <Typography variant="body2" align="center" mt={2}>
-            Already registered? <Link to="/login">Login here</Link>
-          </Typography>
         </form>
       </Box>
     </Container>
