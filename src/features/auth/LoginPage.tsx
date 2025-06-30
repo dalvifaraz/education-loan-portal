@@ -3,8 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button, Typography, Container, Box, CircularProgress } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { TextInput } from '@educational-loan-portal/components';
-import { loginUser } from '@educational-loan-portal/services';
-import { login, showSnackbar } from '@educational-loan-portal/store';
+import { loginUserV2 } from '@educational-loan-portal/services';
+import { login, setUser, showSnackbar, UserState } from '@educational-loan-portal/store';
 
 export const LoginPage = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -20,10 +20,12 @@ export const LoginPage = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await loginUser(formData);
-      dispatch(login({ token: res.token, role: res.role }));
+      const { user } = await loginUserV2(formData);
+      dispatch(setUser(user));
+      dispatch(login({ token: '123456', role: 'client' }));
       dispatch(showSnackbar({ message: 'Login successful!', severity: 'success' }));
-      navigate(res.role === 'admin' ? '/admin/dashboard' : '/client/dashboard');
+      navigate('/client/dashboard');
+      // navigate(res?.role === 'admin' ? '/admin/dashboard' : '/client/dashboard');
     } catch (error: any) {
       dispatch(
         showSnackbar({

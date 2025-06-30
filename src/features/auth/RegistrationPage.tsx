@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button, Container, Typography, Box } from '@mui/material';
 import { TextInput } from '@educational-loan-portal/components';
 import { registerUserV2 } from '@educational-loan-portal/services';
-import { setUser, showSnackbar, UserState } from '@educational-loan-portal/store';
+import { login, setUser, showSnackbar, UserState } from '@educational-loan-portal/store';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
@@ -40,7 +40,9 @@ export const RegisterPage = () => {
     try {
       const res: UserState = await registerUserV2({ name, email, password, confirmPassword });
       dispatch(setUser(res));
-      navigate('/landing');
+      dispatch(login({ token: '123456', role: 'client' }));
+      dispatch(showSnackbar({ message: 'Login successful!', severity: 'success' }));
+      navigate('/client/dashboard');
     } catch (err: any) {
       const message = err?.response?.data?.message || 'Registration failed';
       dispatch(showSnackbar({ message, severity: 'error' }));

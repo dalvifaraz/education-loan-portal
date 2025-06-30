@@ -21,3 +21,8 @@ export const registerUserV2 = async ({
   });
   return data;
 };
+
+export const loginUserV2 = async (data: { email: string; password: string }) => {
+  const res = await axios.post('http://localhost:8000/api/v1/auth/login', data);
+  return res.data;
+};
