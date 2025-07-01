@@ -1,6 +1,6 @@
 // src/services/auth.ts
 import { UserState } from '@educational-loan-portal/store';
-import axios from 'axios';
+import API from './api';
 
 export const registerUserV2 = async ({
   name,
@@ -13,16 +13,22 @@ export const registerUserV2 = async ({
   password: string;
   confirmPassword: string;
 }): Promise<UserState> => {
-  const { data } = await axios.post('http://localhost:8000/api/v1/auth/register', {
-    name,
-    email,
-    password,
-    confirmPassword,
-  });
+  const { data } = await API.post(
+    'auth/register',
+    {
+      name,
+      email,
+      password,
+      confirmPassword,
+    },
+    { withCredentials: true }
+  );
   return data;
 };
 
 export const loginUserV2 = async (data: { email: string; password: string }) => {
-  const res = await axios.post('http://localhost:8000/api/v1/auth/login', data);
+  const res = await API.post('auth/login', data, {
+    withCredentials: true,
+  });
   return res.data;
 };
