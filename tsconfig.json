@@ -18,7 +18,18 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "baseUrl": "src",
+    "paths": {
+      "@educational-loan-portal/components": ["components/index.ts"],
+      "@educational-loan-portal/features": ["features/index.ts"],
+      "@educational-loan-portal/hooks": ["hooks/index.ts"],
+      "@educational-loan-portal/pages": ["pages/index.ts"],
+      "@educational-loan-portal/routes": ["routes/index.ts"],
+      "@educational-loan-portal/services": ["services/index.ts"],
+      "@educational-loan-portal/store": ["store/index.ts"],
+      "@educational-loan-portal/utils": ["utils/index.ts"]
+    }
   },
   "include": [
     "src"
