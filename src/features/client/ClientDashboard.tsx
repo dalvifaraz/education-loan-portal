@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState, UserState } from '@educational-loan-portal/store';
 import { GlobarModal } from '@educational-loan-portal/components';
 import { useNavigate } from 'react-router-dom';
+import { logoutUserV2 } from '@educational-loan-portal/services';
 
 const mockVerifyUserAPI = async (code: string) => {
   return new Promise((resolve) => {
@@ -40,6 +41,7 @@ export const ClientDashboard = () => {
     };
 
   const handleLogout = () => {
+    logoutUserV2()
     localStorage.clear();
     navigate('/login')
   };

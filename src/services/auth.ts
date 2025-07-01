@@ -20,15 +20,14 @@ export const registerUserV2 = async ({
       email,
       password,
       confirmPassword,
-    },
-    { withCredentials: true }
+    }
   );
   return data;
 };
 
 export const loginUserV2 = async (data: { email: string; password: string }) => {
-  const res = await API.post('auth/login', data, {
-    withCredentials: true,
-  });
+  const res = await API.post('auth/login', data);
   return res.data;
 };
+
+export const logoutUserV2 = async () => await API.post('auth/logout');
