@@ -1,11 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-type Role = 'admin' | 'client' | null;
-
-interface AuthState {
-  token: string | null;
-  role: Role;
-}
+import { AuthState, Role } from '@educational-loan-portal/types';
 
 const initialState: AuthState = {
   token: localStorage.getItem('token'),

@@ -6,7 +6,8 @@ interface Props {
   value: string;
   type?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  error?: string;
+  error?: boolean;
+  helperText?: string;
   autoComplete?: string;
 }
 
@@ -17,6 +18,7 @@ export const TextInput = ({
   type = 'text',
   onChange,
   error,
+  helperText,
   autoComplete = 'off',
 }: Props) => (
   <TextField
@@ -29,7 +31,7 @@ export const TextInput = ({
     margin="normal"
     variant="outlined"
     error={!!error}
-    helperText={error}
+    helperText={helperText}
     autoComplete={autoComplete}
   />
 );

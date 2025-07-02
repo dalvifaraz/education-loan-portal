@@ -1,8 +1,9 @@
 import { Navigate } from 'react-router-dom';
+import { Role } from '@educational-loan-portal/types';
 
 interface PrivateRouteProps {
   children: React.ReactNode;
-  role: 'admin' | 'client';
+  role: Role;
 }
 
 export const PrivateRoute = ({ children, role }: PrivateRouteProps) => {

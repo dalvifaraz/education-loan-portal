@@ -47,7 +47,7 @@ export const AppRoutes = () => {
       <Route
         path="/client/dashboard"
         element={
-          <PrivateRoute role="client">
+          <PrivateRoute role="user">
             <ClientDashboard />
           </PrivateRoute>
         }

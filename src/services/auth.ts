@@ -20,6 +20,7 @@ export const registerUserV2 = async ({
       email,
       password,
       confirmPassword,
+      role: 'user'
     }
   );
   return data;

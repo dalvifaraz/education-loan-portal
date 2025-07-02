@@ -28,7 +28,8 @@
       "@educational-loan-portal/routes": ["routes/index.ts"],
       "@educational-loan-portal/services": ["services/index.ts"],
       "@educational-loan-portal/store": ["store/index.ts"],
-      "@educational-loan-portal/utils": ["utils/index.ts"]
+      "@educational-loan-portal/utils": ["utils/index.ts"],
+      "@educational-loan-portal/types": ["types/index.ts"]
     }
   },
   "include": [

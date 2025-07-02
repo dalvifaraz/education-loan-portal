@@ -16,13 +16,17 @@ export const LoginPage = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const isDisabled =
+    !formData.email ||
+    !formData.password;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
       const { user } = await loginUserV2(formData);
       dispatch(setUser(user));
-      dispatch(login({ token: '123456', role: 'client' }));
+      dispatch(login({ token: '123456', role: 'user' }));
       dispatch(showSnackbar({ message: 'Login successful!', severity: 'success' }));
       navigate('/client/dashboard');
       // navigate(res?.role === 'admin' ? '/admin/dashboard' : '/client/dashboard');
@@ -53,7 +57,7 @@ export const LoginPage = () => {
             value={formData.password}
             onChange={handleChange}
           />
-          <Button fullWidth variant="contained" type="submit" sx={{ mt: 2 }} disabled={loading}>
+          <Button fullWidth variant="contained" type="submit" sx={{ mt: 2 }} disabled={loading || isDisabled}>
             {loading ? <CircularProgress size={24} color="inherit" /> : 'Login'}
           </Button>
           <Typography variant="body2" align="center" mt={2}>
