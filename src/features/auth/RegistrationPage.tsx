@@ -3,7 +3,7 @@ import { Button, Container, Typography, Box } from '@mui/material';
 import { TextInput } from '@educational-loan-portal/components';
 import { registerUserV2 } from '@educational-loan-portal/services';
 import { login, setUser, showSnackbar, UserState } from '@educational-loan-portal/store';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
 export const RegisterPage = () => {
@@ -79,6 +79,9 @@ export const RegisterPage = () => {
             value={formData.confirmPassword}
             onChange={handleChange}
           />
+          <Typography variant="body2" align="center" mt={2}>
+            Already have an account? <Link to="/login">Login here</Link>
+          </Typography>
           <Button fullWidth variant="contained" sx={{ mt: 2 }} type="submit" disabled={isDisabled}>
             Register
           </Button>
