@@ -5,10 +5,13 @@ import { registerUserV2 } from '@educational-loan-portal/services';
 import { login, setUser, showSnackbar, UserState } from '@educational-loan-portal/store';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { useRedirectIfAuthenticated, useSessionCheck } from '@educational-loan-portal/hooks';
 
 export const RegisterPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  
+  useSessionCheck();
 
   const [loading, setLoading] = useState(false);
 
@@ -87,7 +90,7 @@ export const RegisterPage = () => {
     try {
       const res: UserState = await registerUserV2({ name, email, password, confirmPassword });
       dispatch(setUser(res));
-      dispatch(login({ token: '123456', role: 'user' }));
+      dispatch(login({ role: 'user' }));
       dispatch(showSnackbar({ message: 'Login successful!', severity: 'success' }));
       navigate('/client/dashboard');
     } catch (err: any) {

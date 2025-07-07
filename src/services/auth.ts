@@ -32,3 +32,8 @@ export const loginUserV2 = async (data: { email: string; password: string }) => 
 };
 
 export const logoutUserV2 = async () => await API.post('auth/logout');
+
+export const getCurrentSessionV2 = async () => {
+  const response = await API.get('session');
+  return response.data;
+}

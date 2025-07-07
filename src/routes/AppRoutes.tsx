@@ -14,6 +14,7 @@ export const AppRoutes = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  // This useeffect is added to make sure logs is added to url to print state value when required!
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const hasLogs = params.get('logs') === 'true';
@@ -39,7 +40,7 @@ export const AppRoutes = () => {
       <Route
         path="/admin/dashboard"
         element={
-          <PrivateRoute role="admin">
+          <PrivateRoute>
             <AdminDashboard />
           </PrivateRoute>
         }
@@ -47,7 +48,7 @@ export const AppRoutes = () => {
       <Route
         path="/client/dashboard"
         element={
-          <PrivateRoute role="user">
+          <PrivateRoute>
             <ClientDashboard />
           </PrivateRoute>
         }

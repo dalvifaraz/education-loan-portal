@@ -4,13 +4,16 @@ import { Button, Typography, Container, Box, CircularProgress } from '@mui/mater
 import { useDispatch } from 'react-redux';
 import { TextInput } from '@educational-loan-portal/components';
 import { loginUserV2 } from '@educational-loan-portal/services';
-import { login, setUser, showSnackbar, UserState } from '@educational-loan-portal/store';
+import { login, setUser, showSnackbar } from '@educational-loan-portal/store';
+import { useRedirectIfAuthenticated, useSessionCheck } from '@educational-loan-portal/hooks';
 
 export const LoginPage = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const userRole = localStorage.getItem('role');
+  useSessionCheck();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -26,7 +29,7 @@ export const LoginPage = () => {
     try {
       const { user } = await loginUserV2(formData);
       dispatch(setUser(user));
-      dispatch(login({ token: '123456', role: 'user' }));
+      dispatch(login({ role: 'user' }));
       dispatch(showSnackbar({ message: 'Login successful!', severity: 'success' }));
       navigate('/client/dashboard');
       // navigate(res?.role === 'admin' ? '/admin/dashboard' : '/client/dashboard');

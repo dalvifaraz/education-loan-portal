@@ -10,6 +10,7 @@ import { RootState, UserState } from '@educational-loan-portal/store';
 import { GlobarModal } from '@educational-loan-portal/components';
 import { useNavigate } from 'react-router-dom';
 import { logoutUserV2 } from '@educational-loan-portal/services';
+import Cookies from 'js-cookie';
 
 const mockVerifyUserAPI = async (code: string) => {
   return new Promise((resolve) => {
@@ -43,6 +44,7 @@ export const ClientDashboard = () => {
   const handleLogout = () => {
     logoutUserV2()
     localStorage.clear();
+    Cookies.remove('accessToken');
     navigate('/login')
   };
 
