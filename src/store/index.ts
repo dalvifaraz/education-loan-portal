@@ -20,11 +20,12 @@ store.subscribe(() => {
   const param = 'Logs';
   // const shouldLog = urlParams.has(param.toLowerCase());
 
-  const isLogsEnabled = new URLSearchParams(window.location.search).get('logs') === 'true';
+  // const isLogsEnabled = new URLSearchParams(window.location.search).get('logs') === 'true';
 
-  if (isLogsEnabled) {
-    console.log('[Redux State]:', store.getState());
-  }
+  // if (isLogsEnabled) {
+  //   console.log('[Redux State]:', store.getState());
+  // }
+  console.log('[Redux State]:', store.getState());
 });
 
 export type RootState = ReturnType<typeof store.getState>;

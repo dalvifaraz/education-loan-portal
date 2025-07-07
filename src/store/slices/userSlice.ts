@@ -1,5 +1,6 @@
 // src/store/userSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Role } from '@educational-loan-portal/types';
 
 interface UserPreferences {
   enable2fa: boolean;
@@ -13,6 +14,7 @@ export interface UserState {
   isEmailVerified: boolean;
   name: string;
   updatedAt: string;
+  role: Role
   userPreferences: UserPreferences;
   _id: string;
   __v?: number;
@@ -28,6 +30,7 @@ const initialState: UserState | null = {
         emailNotification: false,
         _id: ''
     },
+    role: 'user',
     createdAt: '',
     updatedAt: '',
     __v: undefined

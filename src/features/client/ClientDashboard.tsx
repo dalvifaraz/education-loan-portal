@@ -25,6 +25,8 @@ export const ClientDashboard = () => {
   const [openModal, setOpenModal] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
+  console.info('hello', useSelector((state: RootState) => state.user));
+
   useEffect(() => {
     if (!isEmailVerified) {
       setOpenModal(true);
@@ -48,6 +50,18 @@ export const ClientDashboard = () => {
     navigate('/login')
   };
 
+  const renderEmailValidation = () => {
+    return (
+      <GlobarModal
+        open={openModal}
+        title={'Verify Email'}
+        description={'Click below btton to verify user'}
+        onConfirm={handleVerify}
+        onClose={() => setOpenModal(false)}
+      />
+    );
+  }
+
   return (
     <Box display="flex">
       <Sidebar
@@ -59,13 +73,7 @@ export const ClientDashboard = () => {
         <NavBar onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} onLogout={handleLogout} />
         <MainContent />
       </Box>
-      <GlobarModal
-        open={openModal}
-        title={'Verify User'}
-        description={'Click below btton to verify user'}
-        onConfirm={handleVerify}
-        onClose={() => setOpenModal(false)}
-      />
+      {renderEmailValidation()}
     </Box>
   );
 };

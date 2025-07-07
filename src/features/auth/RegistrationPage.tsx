@@ -1,17 +1,15 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Container, Typography, Box } from '@mui/material';
 import { TextInput } from '@educational-loan-portal/components';
-import { registerUserV2 } from '@educational-loan-portal/services';
+import { getCurrentSessionV2, registerUserV2 } from '@educational-loan-portal/services';
 import { login, setUser, showSnackbar, UserState } from '@educational-loan-portal/store';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { useRedirectIfAuthenticated, useSessionCheck } from '@educational-loan-portal/hooks';
+import { updateUserDetails } from '@educational-loan-portal/utils';
 
 export const RegisterPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
-  useSessionCheck();
 
   const [loading, setLoading] = useState(false);
 
@@ -28,6 +26,19 @@ export const RegisterPage = () => {
     password?: string;
     confirmPassword?: string;
   }>({});
+
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const { user } = await getCurrentSessionV2();
+        updateUserDetails(user, dispatch, navigate, login, setUser, showSnackbar);
+      } catch (e) {
+        // Catch error for session check.
+      }
+    };
+
+    checkSession();
+  }, []);
 
   const validateField = (name: string, value: string) => {
     setErrors((prev) => {
@@ -88,11 +99,8 @@ export const RegisterPage = () => {
     const { name, email, password, confirmPassword } = formData;
 
     try {
-      const res: UserState = await registerUserV2({ name, email, password, confirmPassword });
-      dispatch(setUser(res));
-      dispatch(login({ role: 'user' }));
-      dispatch(showSnackbar({ message: 'Login successful!', severity: 'success' }));
-      navigate('/client/dashboard');
+      const user: UserState = await registerUserV2({ name, email, password, confirmPassword });
+      updateUserDetails(user, dispatch, navigate, login, setUser, showSnackbar);
     } catch (err: any) {
       const message = err?.response?.data?.message || 'Registration failed';
       dispatch(showSnackbar({ message, severity: 'error' }));
