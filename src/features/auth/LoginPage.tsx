@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { TextInput } from '@educational-loan-portal/components';
 import { getCurrentSessionV2, loginUserV2 } from '@educational-loan-portal/services';
 import { login, setUser, showSnackbar, UserState } from '@educational-loan-portal/store';
-import { updateUserDetails } from '@educational-loan-portal/utils';
+import { resetUserDetails, updateUserDetails } from '@educational-loan-portal/utils';
 
 export const LoginPage = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -20,6 +20,7 @@ export const LoginPage = () => {
         updateUserDetails(user, dispatch, navigate, login, setUser, showSnackbar);
       } catch (e) {
         // Catch error for session check.
+        resetUserDetails(navigate, dispatch);
       }
     };
 

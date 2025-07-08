@@ -5,7 +5,7 @@ import { getCurrentSessionV2, registerUserV2 } from '@educational-loan-portal/se
 import { login, setUser, showSnackbar, UserState } from '@educational-loan-portal/store';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { updateUserDetails } from '@educational-loan-portal/utils';
+import { resetUserDetails, updateUserDetails } from '@educational-loan-portal/utils';
 
 export const RegisterPage = () => {
   const dispatch = useDispatch();
@@ -34,6 +34,7 @@ export const RegisterPage = () => {
         updateUserDetails(user, dispatch, navigate, login, setUser, showSnackbar);
       } catch (e) {
         // Catch error for session check.
+        resetUserDetails(navigate, dispatch, '/register');
       }
     };
 

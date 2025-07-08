@@ -6,11 +6,11 @@ import { Sidebar } from './Sidebar';
 import { NavBar } from './NavBar';
 import { MainContent } from './MainContent';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, UserState } from '@educational-loan-portal/store';
+import { RootState } from '@educational-loan-portal/store';
 import { GlobarModal } from '@educational-loan-portal/components';
 import { useNavigate } from 'react-router-dom';
 import { logoutUserV2 } from '@educational-loan-portal/services';
-import Cookies from 'js-cookie';
+import { resetUserDetails } from '@educational-loan-portal/utils';
 
 const mockVerifyUserAPI = async (code: string) => {
   return new Promise((resolve) => {
@@ -19,13 +19,12 @@ const mockVerifyUserAPI = async (code: string) => {
 };
 
 export const ClientDashboard = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-    const { isEmailVerified, name } = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch();
+  const { isEmailVerified, name } = useSelector((state: RootState) => state.user);
   const [openModal, setOpenModal] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
-
-  console.info('hello', useSelector((state: RootState) => state.user));
+  
 
   useEffect(() => {
     if (!isEmailVerified) {
@@ -45,9 +44,7 @@ export const ClientDashboard = () => {
 
   const handleLogout = () => {
     logoutUserV2()
-    localStorage.clear();
-    Cookies.remove('accessToken');
-    navigate('/login')
+    resetUserDetails(navigate, dispatch)
   };
 
   const renderEmailValidation = () => {

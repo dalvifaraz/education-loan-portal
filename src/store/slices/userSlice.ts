@@ -36,6 +36,8 @@ const initialState: UserState | null = {
     __v: undefined
 };
 
+export const initalUser = initialState;
+
 const userSlice = createSlice({
   name: 'user',
   initialState,

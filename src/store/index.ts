@@ -16,15 +16,6 @@ export const store = configureStore({
 });
 
 store.subscribe(() => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const param = 'Logs';
-  // const shouldLog = urlParams.has(param.toLowerCase());
-
-  // const isLogsEnabled = new URLSearchParams(window.location.search).get('logs') === 'true';
-
-  // if (isLogsEnabled) {
-  //   console.log('[Redux State]:', store.getState());
-  // }
   console.log('[Redux State]:', store.getState());
 });
 

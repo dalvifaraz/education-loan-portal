@@ -9,8 +9,6 @@ export const useRedirectIfAuthenticated = () => {
     const token = Cookies.get('accessToken');
     const role = localStorage.getItem('role');
 
-    console.info('hello', console.log(Cookies.get()));
-
     if (token && role === 'client') {
       navigate('/client/dashboard');
     } else if (token && role === 'admin') {
