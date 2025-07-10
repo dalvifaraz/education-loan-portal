@@ -7,8 +7,8 @@ export const updateUserDetails = (user: UserState, dispatch: any, navigate: any,
   dispatch(showSnackbar({ message: 'Login successful!', severity: 'success' }));
   // Redirect to role-based dashboard
   const roleRedirectMap: Record<string, string> = {
-    admin: '/admin/dashboard',
-    user: '/client/dashboard',
+    admin: '/admin',
+    user: '/client',
     'super-admin': '/admin/dashboard',
   };
   navigate(roleRedirectMap[user.role || ''] || '/', { replace: true });

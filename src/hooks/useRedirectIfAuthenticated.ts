@@ -10,9 +10,9 @@ export const useRedirectIfAuthenticated = () => {
     const role = localStorage.getItem('role');
 
     if (token && role === 'client') {
-      navigate('/client/dashboard');
+      navigate('/client');
     } else if (token && role === 'admin') {
-      navigate('/admin/dashboard');
+      navigate('/admin');
     }
   }, []);
 };

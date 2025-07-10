@@ -2,4 +2,8 @@ export * from './auth/LoginPage';
 export * from './auth/RegistrationPage';
 export * from './home/HomePage';
 export * from './admin/AdminDashboard';
+export * from './client/ClientAccount';
+export * from './client/ClientHome';
+export * from './client/ClientLayout';
+export * from './client/ClientService';
 export * from './client/ClientDashboard';

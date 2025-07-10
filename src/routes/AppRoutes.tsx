@@ -3,14 +3,17 @@ import {
   HomePage,
   LoginPage,
   RegisterPage,
-  ClientDashboard,
   AdminDashboard,
+  ClientDashboard,
+  ClientAccount,
+  ClientHome,
+  ClientLayout,
+  ClientService
 } from '@educational-loan-portal/features';
 import { NotFoundPage } from '@educational-loan-portal/pages';
 import { PrivateRoute } from './PrivateRoute';
 
 export const AppRoutes = () => {
-
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/home" replace />} />
@@ -28,13 +31,18 @@ export const AppRoutes = () => {
         }
       />
       <Route
-        path="/client/dashboard"
+        path="/client"
         element={
           <PrivateRoute>
-            <ClientDashboard />
+            <ClientLayout />
           </PrivateRoute>
         }
-      />
+      >
+        <Route index element={<ClientHome />} /> {/* /client */}
+        <Route path="dashboard" element={<ClientDashboard />} /> {/* /client/dashboard */}
+        <Route path="account" element={<ClientAccount />} /> {/* /client/account */}
+        <Route path="customer-service" element={<ClientService />} /> {/* /client/client-service */}
+      </Route>
 
       <Route path="*" element={<NotFoundPage />} />
     </Routes>

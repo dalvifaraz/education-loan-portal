@@ -17,9 +17,9 @@ export const useSessionCheck = () => {
         if (isAuthPage) {
           // Redirect to role-based dashboard
           const roleRedirectMap: Record<string, string> = {
-            admin: '/admin/dashboard',
-            user: '/client/dashboard',
-            'super-admin': '/admin/dashboard',
+            admin: '/admin',
+            user: '/client',
+            'super-admin': '/admin',
           };
           navigate(roleRedirectMap[user.role] || '/', { replace: true });
         }
