@@ -37,3 +37,8 @@ export const getCurrentSessionV2 = async () => {
   const response = await API.get('session');
   return response.data;
 }
+
+export const emailVerificationV2 = async (otp: string[]) => {
+  const response = await API.post('auth/verify/email', { code: otp.join('') });
+  return response.data;
+}

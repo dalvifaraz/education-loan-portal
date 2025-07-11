@@ -1,15 +1,16 @@
 import { Box, Typography } from '@mui/material';
 import { GlobarModal, OtpModalBody } from '@educational-loan-portal/components';
 import { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '@educational-loan-portal/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, showSnackbar, updateVerification } from '@educational-loan-portal/store';
+import { emailVerificationV2 } from '@educational-loan-portal/services';
 
 export const ClientDashboard = () => {
   const { isEmailVerified } = useSelector((state: RootState) => state.user);
   const [openModal, setOpenModal] = useState(false);
   const [otp, setOtp] = useState<string[]>(['', '', '', '', '', '']);
   const otpRef = useRef<Array<HTMLInputElement | null>>([]);
-
+  const dispatch = useDispatch();
   useEffect(() => {
     if (!isEmailVerified) {
       setOpenModal(true);
@@ -17,8 +18,21 @@ export const ClientDashboard = () => {
   }, [isEmailVerified]);
 
   const handleVerify = async () => {
-    setOpenModal(false);
-    console.log('TODO: verify user api call needed', otp);
+    try {
+      // Call the email verification API
+      await emailVerificationV2(otp);
+      dispatch(updateVerification());
+    } catch (error) {
+      console.error('Error verifying email:', error);
+      dispatch(
+        showSnackbar({
+          message: 'Email verification failed, try again later.',
+          severity: 'error',
+        })
+      );
+    } finally {
+      setOpenModal(false);
+    }
   };
 
   const handleOtpChange = (value: string, index: number) => {
@@ -51,6 +65,7 @@ export const ClientDashboard = () => {
         description={'Click below btton to verify user'}
         onConfirm={handleVerify}
         onClose={() => setOpenModal(false)}
+        isConfirmDisabled={otp.some((digit) => digit === '')}
       >
         <OtpModalBody
           otp={otp}

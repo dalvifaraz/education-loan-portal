@@ -10,6 +10,7 @@ interface GlobarModalProps {
   confirmLabel?: string;
   children?: React.ReactNode;
   footer?: React.ReactNode;
+  isConfirmDisabled?: boolean;
 }
 
 export const GlobarModal = ({
@@ -21,6 +22,7 @@ export const GlobarModal = ({
   confirmLabel = 'Confirm',
   children,
   footer,
+  isConfirmDisabled = false,
 }: GlobarModalProps) => {
   return (
     <Modal open={open}>
@@ -50,7 +52,7 @@ export const GlobarModal = ({
         {footer
           ? footer
           : onConfirm && (
-              <Button fullWidth variant="contained" onClick={onConfirm}>
+              <Button disabled={isConfirmDisabled} fullWidth variant="contained" onClick={onConfirm}>
                 {confirmLabel}
               </Button>
             )}
