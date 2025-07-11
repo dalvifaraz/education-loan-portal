@@ -22,11 +22,10 @@ export const ClientDashboard = () => {
       // Call the email verification API
       await emailVerificationV2(otp);
       dispatch(updateVerification());
-    } catch (error) {
-      console.error('Error verifying email:', error);
+    } catch (error: any) {
       dispatch(
         showSnackbar({
-          message: 'Email verification failed, try again later.',
+          message: error?.response?.data?.message || 'Failed to verify email.',
           severity: 'error',
         })
       );

@@ -42,3 +42,8 @@ export const emailVerificationV2 = async (otp: string[]) => {
   const response = await API.post('auth/verify/email', { code: otp.join('') });
   return response.data;
 }
+
+export const forgotPasswordV2 = async (email: string) => {
+  const response = await API.post('auth/password/forgot', { email });
+  return response.data;
+};
