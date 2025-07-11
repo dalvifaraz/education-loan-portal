@@ -11,6 +11,7 @@ module.exports = function override(config) {
     '@educational-loan-portal/services': path.resolve(__dirname, 'src/services'),
     '@educational-loan-portal/store': path.resolve(__dirname, 'src/store'),
     '@educational-loan-portal/utils': path.resolve(__dirname, 'src/utils'),
+    '@educational-loan-portal/types': path.resolve(__dirname, 'src/types')
   };
   return config;
 };

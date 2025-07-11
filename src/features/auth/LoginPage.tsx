@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button, Typography, Container, Box, CircularProgress } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { TextInput } from '@educational-loan-portal/components';
-import { loginUserV2 } from '@educational-loan-portal/services';
+import { getCurrentSessionV2, loginUserV2 } from '@educational-loan-portal/services';
 import { login, setUser, showSnackbar, UserState } from '@educational-loan-portal/store';
+import { resetUserDetails, updateUserDetails } from '@educational-loan-portal/utils';
 
 export const LoginPage = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -12,20 +13,32 @@ export const LoginPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const { user } = await getCurrentSessionV2();
+        updateUserDetails(user, dispatch, navigate, login, setUser, showSnackbar);
+      } catch (e) {
+        // Catch error for session check.
+        resetUserDetails(navigate, dispatch);
+      }
+    };
+
+    checkSession();
+  }, []);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
+  const isDisabled = !formData.email || !formData.password;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
       const { user } = await loginUserV2(formData);
-      dispatch(setUser(user));
-      dispatch(login({ token: '123456', role: 'client' }));
-      dispatch(showSnackbar({ message: 'Login successful!', severity: 'success' }));
-      navigate('/client/dashboard');
-      // navigate(res?.role === 'admin' ? '/admin/dashboard' : '/client/dashboard');
+      updateUserDetails(user, dispatch, navigate, login, setUser, showSnackbar);
     } catch (error: any) {
       dispatch(
         showSnackbar({
@@ -53,7 +66,13 @@ export const LoginPage = () => {
             value={formData.password}
             onChange={handleChange}
           />
-          <Button fullWidth variant="contained" type="submit" sx={{ mt: 2 }} disabled={loading}>
+          <Button
+            fullWidth
+            variant="contained"
+            type="submit"
+            sx={{ mt: 2 }}
+            disabled={loading || isDisabled}
+          >
             {loading ? <CircularProgress size={24} color="inherit" /> : 'Login'}
           </Button>
           <Typography variant="body2" align="center" mt={2}>

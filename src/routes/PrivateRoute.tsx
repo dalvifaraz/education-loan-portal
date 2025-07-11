@@ -1,23 +1,26 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
+import { PrivateRouteProps } from '@educational-loan-portal/types';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { getCurrentSessionV2 } from '@educational-loan-portal/services';
+import { resetUserDetails, updateUserDetails } from '@educational-loan-portal/utils';
+import { login, setUser, showSnackbar } from '@educational-loan-portal/store';
 
-interface PrivateRouteProps {
-  children: React.ReactNode;
-  role: 'admin' | 'client';
-}
-
-export const PrivateRoute = ({ children, role }: PrivateRouteProps) => {
-  const token = localStorage.getItem('token');
-  const userRole = localStorage.getItem('role');
-
-  if (!token) {
-    // Not logged in
-    return <Navigate to="/login" replace />;
-  }
-
-  if (userRole !== role) {
-    // Logged in but wrong role
-    return <Navigate to="/" replace />;
-  }
-
+export const PrivateRoute = ({ children }: PrivateRouteProps) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  useEffect(() => {
+      const checkSession = async () => {
+        try {
+          const { user } = await getCurrentSessionV2();
+          updateUserDetails(user, dispatch, navigate, login, setUser, showSnackbar);
+        } catch (e) {
+          // Catch error for session check.
+          resetUserDetails(navigate, dispatch);
+        }
+      };
+  
+      checkSession();
+    }, []);
   return <>{children}</>;
 };

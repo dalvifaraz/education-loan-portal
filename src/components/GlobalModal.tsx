@@ -4,19 +4,25 @@ import CloseIcon from '@mui/icons-material/Close';
 interface GlobarModalProps {
   open: boolean;
   title: string;
-  description: string;
-  onConfirm: () => void;
-  onClose?: () => void;
+  description?: string;
+  onConfirm?: () => void;
+  onClose: () => void;
   confirmLabel?: string;
+  children?: React.ReactNode;
+  footer?: React.ReactNode;
+  isConfirmDisabled?: boolean;
 }
 
 export const GlobarModal = ({
   open,
   title,
-  description,
+  description = 'description',
   onConfirm,
   onClose,
   confirmLabel = 'Confirm',
+  children,
+  footer,
+  isConfirmDisabled = false,
 }: GlobarModalProps) => {
   return (
     <Modal open={open}>
@@ -39,10 +45,17 @@ export const GlobarModal = ({
             </IconButton>
           )}
         </Box>
-        <Typography mb={2}>{description}</Typography>
-        <Button fullWidth variant="contained" onClick={onConfirm}>
-          {confirmLabel}
-        </Button>
+        {/* Body */}
+        {children ? children : description && <Typography mb={2}>{description}</Typography>}
+
+        {/* Footer */}
+        {footer
+          ? footer
+          : onConfirm && (
+              <Button disabled={isConfirmDisabled} fullWidth variant="contained" onClick={onConfirm}>
+                {confirmLabel}
+              </Button>
+            )}
       </Box>
     </Modal>
   );
