@@ -1,10 +1,11 @@
 import { BrowserRouter } from 'react-router-dom';
 import { AppRoutes } from '@educational-loan-portal/routes';
-import { GlobalSnackbar } from '@educational-loan-portal/components';
+import { FullScreenLoader, GlobalSnackbar } from '@educational-loan-portal/components';
 
 function App() {
   return (
     <BrowserRouter>
+      <FullScreenLoader />
       <AppRoutes />
       <GlobalSnackbar />
     </BrowserRouter>

@@ -1,15 +1,19 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getCurrentSessionV2 } from '@educational-loan-portal/services';
+import { useDispatch } from 'react-redux';
+import { hideLoader, showLoader } from '@educational-loan-portal/store';
 
 export const useSessionCheck = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const validateSession = async () => {
       try {
+        dispatch(showLoader());
         const { user } = await getCurrentSessionV2();
 
         const isAuthPage = ['/login', '/register'].includes(location.pathname);
@@ -30,6 +34,7 @@ export const useSessionCheck = () => {
         }
       } finally {
         setLoading(false);
+        dispatch(hideLoader());
       }
     };
 

@@ -2,7 +2,7 @@
 import { Button, Container, Typography, Box } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { showSnackbar } from '@educational-loan-portal/store';
+import { hideLoader, showLoader, showSnackbar } from '@educational-loan-portal/store';
 
 export const HomePage = () => {
   const navigate = useNavigate();
@@ -31,6 +31,16 @@ export const HomePage = () => {
           }
         >
           Show Snackbar Test
+        </Button>
+        <Button
+          onClick={() => {
+            dispatch(showLoader());
+            setTimeout(() => {
+              dispatch(hideLoader());
+            }, 2000);
+          }}
+        >
+          Show Loader
         </Button>
       </Box>
     </Container>
