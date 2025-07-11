@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Button, Container, Typography, Box } from '@mui/material';
 import { TextInput } from '@educational-loan-portal/components';
 import { getCurrentSessionV2, registerUserV2 } from '@educational-loan-portal/services';
-import { login, setUser, showSnackbar, UserState } from '@educational-loan-portal/store';
+import { hideLoader, login, setUser, showLoader, showSnackbar, UserState } from '@educational-loan-portal/store';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { resetUserDetails, updateUserDetails } from '@educational-loan-portal/utils';
@@ -30,11 +30,14 @@ export const RegisterPage = () => {
   useEffect(() => {
     const checkSession = async () => {
       try {
+        dispatch(showLoader());
         const { user } = await getCurrentSessionV2();
         updateUserDetails(user, dispatch, navigate, login, setUser, showSnackbar);
       } catch (e) {
         // Catch error for session check.
         resetUserDetails(navigate, dispatch, '/register');
+      } finally {
+        dispatch(hideLoader());
       }
     };
 
@@ -100,12 +103,14 @@ export const RegisterPage = () => {
     const { name, email, password, confirmPassword } = formData;
 
     try {
+      dispatch(showLoader());
       const user: UserState = await registerUserV2({ name, email, password, confirmPassword });
       updateUserDetails(user, dispatch, navigate, login, setUser, showSnackbar);
     } catch (err: any) {
       const message = err?.response?.data?.message || 'Registration failed';
       dispatch(showSnackbar({ message, severity: 'error' }));
     } finally {
+      dispatch(hideLoader());
       setLoading(false);
     }
   };

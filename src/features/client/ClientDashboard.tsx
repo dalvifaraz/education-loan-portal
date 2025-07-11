@@ -2,7 +2,7 @@ import { Box, Typography } from '@mui/material';
 import { GlobarModal, OtpModalBody } from '@educational-loan-portal/components';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, showSnackbar, updateVerification } from '@educational-loan-portal/store';
+import { hideLoader, RootState, showLoader, showSnackbar, updateVerification } from '@educational-loan-portal/store';
 import { emailVerificationV2 } from '@educational-loan-portal/services';
 
 export const ClientDashboard = () => {
@@ -19,6 +19,7 @@ export const ClientDashboard = () => {
 
   const handleVerify = async () => {
     try {
+      dispatch(showLoader());
       // Call the email verification API
       await emailVerificationV2(otp);
       dispatch(updateVerification());
@@ -30,6 +31,7 @@ export const ClientDashboard = () => {
         })
       );
     } finally {
+      dispatch(hideLoader());
       setOpenModal(false);
     }
   };

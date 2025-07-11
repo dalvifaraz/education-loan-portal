@@ -4,7 +4,7 @@ import { Button, Typography, Container, Box, CircularProgress, TextField } from 
 import { useDispatch } from 'react-redux';
 import { GlobarModal, TextInput } from '@educational-loan-portal/components';
 import { forgotPasswordV2, getCurrentSessionV2, loginUserV2 } from '@educational-loan-portal/services';
-import { login, setUser, showSnackbar, UserState } from '@educational-loan-portal/store';
+import { hideLoader, login, setUser, showLoader, showSnackbar, UserState } from '@educational-loan-portal/store';
 import { resetUserDetails, updateUserDetails } from '@educational-loan-portal/utils';
 
 export const LoginPage = () => {
@@ -19,11 +19,14 @@ export const LoginPage = () => {
   useEffect(() => {
     const checkSession = async () => {
       try {
+        dispatch(showLoader());
         const { user } = await getCurrentSessionV2();
         updateUserDetails(user, dispatch, navigate, login, setUser, showSnackbar);
       } catch (e) {
         // Catch error for session check.
         resetUserDetails(navigate, dispatch);
+      } finally {
+        dispatch(hideLoader());
       }
     };
 
@@ -40,6 +43,7 @@ export const LoginPage = () => {
     e.preventDefault();
     setLoading(true);
     try {
+      dispatch(showLoader());
       const { user } = await loginUserV2(formData);
       updateUserDetails(user, dispatch, navigate, login, setUser, showSnackbar);
     } catch (error: any) {
@@ -50,6 +54,7 @@ export const LoginPage = () => {
         })
       );
     } finally {
+      dispatch(hideLoader());
       setLoading(false);
     }
   };
@@ -57,6 +62,7 @@ export const LoginPage = () => {
   // Forgot password handlers
   const handleForgotSubmit = async () => {
     try {
+      dispatch(showLoader());
       await forgotPasswordV2(forgotEmail);
       dispatch(
         showSnackbar({
@@ -72,6 +78,7 @@ export const LoginPage = () => {
         })
       );
     } finally {
+      dispatch(hideLoader());
       setForgotOpen(false);
       setForgotEmail('');
     }
